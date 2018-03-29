@@ -19,6 +19,24 @@ class App extends Component {
       searchAssets: {}
     };
   }
+  async componentWillMount() {
+    const payload = await axios.post("http://localhost:3000/api/getassets", {
+      pageSize: this.state.assetsPerPage,
+      pageNo: this.state.currentPage
+    });
+    const { assets, count } = payload.data;
+
+    const start = 10 * (1 - 1);
+    const end = 10 * this.state.currentPage;
+    const assetsToShow = Object.entries(assets)
+      .slice(start, end)
+      .map(x => x[1]);
+    this.setState({
+      assets,
+      assetsCount: count,
+      assetsToShow
+    });
+  }
   //This function adds a new item
   addAsset = async item => {
 
@@ -69,7 +87,7 @@ class App extends Component {
               <InventoryList
                 editAsset={this.editAsset}
                 deleteAsset={this.deleteAsset}
-                assets={this.state.inventory.assets}
+                {...this.state}
               />
             );
           }}

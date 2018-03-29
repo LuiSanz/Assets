@@ -17,47 +17,32 @@ class InventoryList extends Component {
     };
   }
   async componentWillMount() {
-    const payload = await axios.post("http://localhost:3000/api/getassets", {
-      pageSize: this.state.assetsPerPage,
-      pageNo: this.state.currentPage
-    });
-    const { assets, count } = payload.data;
 
-    const start = 10 * (1 - 1);
-    const end = 10 * this.state.currentPage;
-    const assetsToShow = Object.entries(assets)
-      .slice(start, end)
-      .map(x => x[1]);
-    this.setState({
-      assets,
-      assetsCount: count,
-      assetsToShow
-    });
   }
   /** (Description: This function moves next and previous pagination)
    *
    */
   handlePage = async e => {
     e.preventDefault();
-    let page = this.state.currentPage;
+    let page = this.props.currentPage;
     const searchAssets =
-      !Object.keys(this.state.searchAssets).length === 0
+      !Object.keys(this.props.searchAssets).length === 0
         ? {}
-        : { ...this.state.searchAssets };
+        : { ...this.props.searchAssets };
     if (!(Object.keys(searchAssets).length === 0)) {
-      const searchCount = Object.keys(this.state.searchAssets).length;
-      const searchPages = Math.ceil(searchCount / this.state.assetsPerPage);
-      if (e.target.name === "next" && this.state.currentPage >= searchPages)
+      const searchCount = Object.keys(this.props.searchAssets).length;
+      const searchPages = Math.ceil(searchCount / this.props.assetsPerPage);
+      if (e.target.name === "next" && this.props.currentPage >= searchPages)
         return;
-      if (e.target.name === "previous" && this.state.currentPage <= 1) return;
+      if (e.target.name === "previous" && this.props.currentPage <= 1) return;
       if (e.target.name === "next") page++;
       if (e.target.name === "previous") page--;
-      this.assetsToDisplay(page, this.state.assetsPerPage, searchAssets);
+      this.assetsToDisplay(page, this.props.assetsPerPage, searchAssets);
       return;
     }
-    const pages = Math.ceil(this.state.assetsCount / this.state.assetsPerPage);
-    if (e.target.name === "next" && this.state.currentPage >= pages) return;
-    if (e.target.name === "previous" && this.state.currentPage <= 1) return;
+    const pages = Math.ceil(this.props.assetsCount / this.props.assetsPerPage);
+    if (e.target.name === "next" && this.props.currentPage >= pages) return;
+    if (e.target.name === "previous" && this.props.currentPage <= 1) return;
     if (e.target.name === "next") page++;
     if (e.target.name === "previous") page--;
 
@@ -88,7 +73,7 @@ class InventoryList extends Component {
   handlePagingSize = async e => {
     const assetsPerPage = parseInt(e.target.value, 10);
     const currentPage = 1;
-    const searchAssets = { ...this.state.searchAssets };
+    const searchAssets = { ...this.props.searchAssets };
     if (!(Object.keys(searchAssets).length === 0)) {
       this.setState({ assetsPerPage, currentPage });
       this.assetsToDisplay(currentPage, assetsPerPage, searchAssets);
@@ -102,7 +87,7 @@ class InventoryList extends Component {
    * It then sets the state for the list of assets that need to be shown.
    */
   assetsToDisplay = async (pageNo = 1, assetpp = 0, searchResults = {}) => {
-    const assetsPerPage = assetpp ? assetpp : this.state.assetsPerPage;
+    const assetsPerPage = assetpp ? assetpp : this.props.assetsPerPage;
     const start = assetsPerPage * (pageNo - 1);
     const end = assetsPerPage * pageNo;
 
@@ -112,12 +97,12 @@ class InventoryList extends Component {
     }
     if (
       !(Object.keys(searchResults).length === 0) &&
-      !(Object.keys(this.state.searchAssets).length === 0)
+      !(Object.keys(this.props.searchAssets).length === 0)
     ) {
-      assetsToDisplay = { ...this.state.searchAssets };
+      assetsToDisplay = { ...this.props.searchAssets };
     }
     if (Object.keys(assetsToDisplay).length === 0) {
-      assetsToDisplay = { ...this.state.assets };
+      assetsToDisplay = { ...this.props.assets };
     }
 
     const assetsToShow = Object.entries(assetsToDisplay)
@@ -198,7 +183,7 @@ class InventoryList extends Component {
               <th style={columnStyle}>Comments</th>
               <th style={columnStyle}>Actions</th>
             </tr>
-            {Object.keys(this.state.assetsToShow).map(assetKey => {
+            {Object.keys(this.props.assetsToShow).map(assetKey => {
               const {
                 assignedTo,
                 assetType,
@@ -210,7 +195,7 @@ class InventoryList extends Component {
                 location,
                 branch,
                 greenTag
-              } = this.state.assetsToShow[assetKey];
+              } = this.props.assetsToShow[assetKey];
 
               return (
                 <React.Fragment key={assetKey}>
