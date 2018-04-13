@@ -14,6 +14,7 @@ require("./models/AssetType");
 require("./models/Location");
 require("./models/Branch");
 require("./services/passport")(passport);
+
 //require("./services/mongoImport")();
 //test
 mongoose.connect(keys.mongoURI);

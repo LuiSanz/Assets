@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Form from "./Form";
 import axios from "axios";
-
 class InventoryList extends Component {
   constructor() {
     super();
@@ -16,9 +15,7 @@ class InventoryList extends Component {
       searchAssets: {}
     };
   }
-  async componentWillMount() {
-
-  }
+  async componentWillMount() {}
   /** (Description: This function moves next and previous pagination)
    *
    */

@@ -4,6 +4,7 @@ import Home from "./Home";
 import Form from "./Form";
 import InventoryList from "./InventoryList";
 import axios from "axios";
+import InventoryDisplay from "./InventoryDisplay";
 
 class App extends Component {
   constructor() {
@@ -39,7 +40,6 @@ class App extends Component {
   }
   //This function adds a new item
   addAsset = async item => {
-
     const assets = { ...this.state.inventory.assets };
     const timeStamp = Date.now();
 
@@ -83,13 +83,7 @@ class App extends Component {
           exact
           path="/InventoryList"
           render={() => {
-            return (
-              <InventoryList
-                editAsset={this.editAsset}
-                deleteAsset={this.deleteAsset}
-                {...this.state}
-              />
-            );
+            return <InventoryDisplay assets={this.state.assets} />;
           }}
         />
       </div>
