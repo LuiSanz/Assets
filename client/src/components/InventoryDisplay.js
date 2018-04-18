@@ -1,10 +1,22 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-class InventoryDisplay extends Component {
+class InventoryDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      assets: props.assets
+    };
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.assets !== prevState.assets) {
+      return { assets: nextProps.assets };
+    }
+    return null;
+  }
   render() {
-    const data = [...this.props.assets];
+    const data = [...this.state.assets];
 
     const columns = [
       {
@@ -38,6 +50,10 @@ class InventoryDisplay extends Component {
       {
         Header: "Serial No.",
         accessor: "serial" // String-based value accessors!
+      },
+      {
+        Header: "Comments",
+        accessor: "comment" // String-based value accessors!
       },
       {
         Header: "Actions",

@@ -1,12 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import { Route, Link } from "react-router-dom";
+import { render } from "react-dom";
 import Home from "./Home";
 import Form from "./Form";
 import InventoryList from "./InventoryList";
 import axios from "axios";
 import InventoryDisplay from "./InventoryDisplay";
 
-class App extends Component {
+class App extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -21,26 +22,13 @@ class App extends Component {
     };
   }
   async componentWillMount() {
-    const payload = await axios.post("http://localhost:3000/api/getassets", {
-      pageSize: this.state.assetsPerPage,
-      pageNo: this.state.currentPage
-    });
-    const { assets, count } = payload.data;
-
-    const start = 10 * (1 - 1);
-    const end = 10 * this.state.currentPage;
-    const assetsToShow = Object.entries(assets)
-      .slice(start, end)
-      .map(x => x[1]);
-    this.setState({
-      assets,
-      assetsCount: count,
-      assetsToShow
-    });
+    const payload = await axios.post("http://localhost:3000/api/getassets");
+    const { assets } = payload.data;
+    this.setState({ assets });
   }
   //This function adds a new item
   addAsset = async item => {
-    const assets = { ...this.state.inventory.assets };
+    const assets = { ...this.state.assets };
     const timeStamp = Date.now();
 
     const savedItem = await axios.post("http://localhost:3000/api/saveform", {
@@ -48,7 +36,7 @@ class App extends Component {
     });
     assets[`item-${timeStamp}`] = savedItem.data.newAsset;
 
-    this.setState({ inventory: { assets } });
+    this.setState({ assets });
   };
   editAsset = async (asset, hideForm) => {
     const newasset = await axios.post("http://localhost:3000/api/editasset", {

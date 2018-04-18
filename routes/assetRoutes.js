@@ -38,12 +38,9 @@ module.exports = app => {
   });
 
   app.post("/api/getassets", async (req, res) => {
-    const count = await Asset.count();
     const assets = await Asset.find();
-    // .skip(req.body.pageSize * (req.body.pageNo - 1))
-    // .limit(req.body.pageSize);
 
-    res.send({ assets, count });
+    res.send({ assets });
   });
 
   app.post("/api/editasset", async (req, res) => {
@@ -190,7 +187,7 @@ module.exports = app => {
           }
         }
       ],
-      function (err, results) { }
+      function(err, results) {}
     );
     res.send(assets);
   });
