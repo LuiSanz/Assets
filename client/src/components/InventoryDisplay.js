@@ -3,21 +3,23 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 
 class InventoryDisplay extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      assets: props.assets
-    };
-  }
+  state = {
+    data: [],
+    assets: [],
+    loading: true
+  };
+
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.assets !== prevState.assets) {
-      return { assets: nextProps.assets };
-    }
+    if (prevState.data !== nextProps.assets)
+      return {
+        assets: nextProps.assets,
+        data: nextProps.assets,
+        loading: false
+      };
+
     return null;
   }
   render() {
-    const data = [...this.state.assets];
-
     const columns = [
       {
         Header: "Brand",
@@ -61,7 +63,14 @@ class InventoryDisplay extends React.Component {
       }
     ];
 
-    return <ReactTable filterable data={data} columns={columns} />;
+    return (
+      <ReactTable
+        filterable
+        data={this.state.data}
+        columns={columns}
+        loading={this.state.loading}
+      />
+    );
   }
 }
 

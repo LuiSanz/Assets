@@ -71,7 +71,7 @@ class App extends React.Component {
           exact
           path="/InventoryList"
           render={() => {
-            return <InventoryDisplay assets={this.state.assets} />;
+            return <InventoryDisplay assets={[...this.state.assets]} />;
           }}
         />
       </div>

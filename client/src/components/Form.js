@@ -127,6 +127,7 @@ class Form extends Component {
       locations,
       statuses
     } = this.state.formData;
+
     return (
       <div>
         <form onSubmit={this.handleForm}>
